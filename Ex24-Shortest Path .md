@@ -1,5 +1,5 @@
 # Ex24 Shortest Path and Reachability in a Heritage Town using BFS
-## DATE:
+## DATE: 03-09-2026
 ## AIM:
 To design and implement a java program that, given a map of attractions in a heritage town connected by walking paths, recommends:
 The shortest number of paths (minimum hops) from a starting attraction to a target attraction.
@@ -7,22 +7,96 @@ The number of reachable attractions from the same starting point using Breadth-F
 
 
 ## Algorithm
-1. 
-2. 
-3. 
-4.  
-5.   
+1. Start the program.
+2. Represent the heritage town map as a graph using a HashMap where each key is an attraction and its value is a list of connected attractions (walking paths).
+3. Implement a BFS traversal to:
+4. Visit all reachable attractions from a given starting attraction.
+5. Count the total number of reachable attractions.
+6. Implement another BFS-based shortest path algorithm that:
+7. Uses a queue and a distance map.
+8. Tracks the shortest number of hops (edges) from the start to the target attraction.
+9. In the main() method:
+10. Define the map (graph).
+11. Take a starting and target attraction.
+12. Display the reachable attractions and the shortest distance.
+13. Stop the program. 
 
 ## Program:
-```
+```java
 /*
 Program to determine Shortest Path and Reachability in a Heritage Town using BFS
-Developed by: 
-RegisterNumber:  
+Developed by: Syed Mohamed Raihan M
+RegisterNumber:  212223040167
 */
+import java.util.*;
+
+public class TouristNavigation {
+    
+    public static int bfs(List<List<Integer>> graph, int start, int target, int n) {
+        boolean[] visited = new boolean[n];
+        int[] dist = new int[n];
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(start);
+        visited[start] = true;
+        dist[start] = 0;
+
+        while (!q.isEmpty()) {
+            int curr = q.poll();
+            if (curr == target) return dist[curr];
+            for (int neigh : graph.get(curr)) {
+                if (!visited[neigh]) {
+                    visited[neigh] = true;
+                    dist[neigh] = dist[curr] + 1;
+                    q.offer(neigh);
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static void dfs(List<List<Integer>> graph, boolean[] visited, int node) {
+        visited[node] = true;
+        for (int neighbor : graph.get(node)) {
+            if (!visited[neighbor]) {
+                dfs(graph, visited, neighbor);
+            }
+        }
+    }
+
+    public static int countReachable(boolean[] visited) {
+        int count = 0;
+        for (boolean v : visited) if (v) count++;
+        return count;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), e = sc.nextInt();
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+
+        for (int i = 0; i < e; i++) {
+            int u = sc.nextInt(), v = sc.nextInt();
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+        int start = sc.nextInt();
+        int target = sc.nextInt();
+
+        int shortest = bfs(graph, start, target, n);
+        boolean[] visited = new boolean[n];
+        dfs(graph, visited, start);
+        int reachable = countReachable(visited);
+
+        System.out.println("Shortest path from start to target: " + shortest);
+        System.out.println("Total reachable attractions from start: " + reachable);
+    }
+}
 ```
 
 ## Output:
+<img width="927" height="235" alt="image" src="https://github.com/user-attachments/assets/6d297bc4-1fe4-4b59-bc68-36ec9490cc8a" />
 
 
 
